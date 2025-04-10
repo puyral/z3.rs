@@ -159,3 +159,26 @@ impl Drop for FuncDecl<'_> {
         }
     }
 }
+
+impl Clone for FuncDecl<'_> {
+    fn clone(&self) -> Self {
+        let Self { ctx, z3_func_decl } = self;
+        unsafe { Self::wrap(ctx, *z3_func_decl) }
+    }
+}
+
+impl PartialEq for FuncDecl<'_> {
+    fn eq(&self, other: &Self) -> bool {
+        assert_eq!(self.ctx, other.ctx);
+        unsafe { Z3_is_eq_func_decl(self.ctx.z3_ctx, self.z3_func_decl, other.z3_func_decl) }
+    }
+}
+
+impl Eq for FuncDecl<'_> {}
+
+impl ::std::hash::Hash for FuncDecl<'_> {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        let id = unsafe { Z3_get_func_decl_id(self.ctx.z3_ctx, self.z3_func_decl) };
+        id.hash(state);
+    }
+}
