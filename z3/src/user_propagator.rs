@@ -472,7 +472,8 @@ mod callbacks {
         ctx: *mut ::std::ffi::c_void,
         new_context: Z3_context,
     ) -> *mut ::std::ffi::c_void {
-        ::std::ptr::null_mut()
+        // ::std::ptr::null_mut()
+        ctx
     }
 
     pub(crate) extern "C" fn fixed_eh<'ctx, U: UserPropagator<'ctx>>(
